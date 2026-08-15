@@ -34,7 +34,7 @@ void print_encoder_count(void)
 
 void pos_pid(float dt)
 {
-    int32_t last_position = __HAL_TIM_GET_COUNTER(__HANDLE__);
+    int32_t last_position = __HAL_TIM_GET_COUNTER(&htim2);
     float error = (target_pos - last_position);
 
     pos_integral += pos_integral;
