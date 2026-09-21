@@ -5,7 +5,7 @@
 extern TIM_HandleTypeDef htim3;
 extern ADC_HandleTypeDef hadc1;
 
-void update_servo_from_pot(void)
+void update_servo_from_pot(void) //base
 {
     ADC_ChannelConfTypeDef sConfig = {0};
     sConfig.Channel = ADC_CHANNEL_5; // PA5
@@ -19,4 +19,37 @@ void update_servo_from_pot(void)
 
     uint32_t pulse_width = 1000 + (adc_value * 1000) / 4095;
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, pulse_width);
+}
+
+void update_joint_servo_from_pot(void) //joint
+{
+    ADC_ChannelConfTypeDef sConfig = {0};
+    sConfig.Channel = ADC_CHANNEL_6; 
+    sConfig.Rank = 1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+    HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 10);
+    uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+
+    uint32_t pulse_width = 1000 + (adc_value * 1000) / 4095;
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, pulse_width);
+}
+
+
+void update_claw_servo_from_pot(void) //claw
+{
+    ADC_ChannelConfTypeDef sConfig = {0};
+    sConfig.Channel = ADC_CHANNEL_7; 
+    sConfig.Rank = 1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+    HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 10);
+    uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+
+    uint32_t pulse_width = 1000 + (adc_value * 1000) / 4095;
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, pulse_width);
 }
